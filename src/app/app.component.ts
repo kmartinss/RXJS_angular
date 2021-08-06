@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { Observable } from "rxjs";
 
 @Component({
   selector: "app-root",
@@ -42,21 +43,40 @@ import { Component, OnInit } from "@angular/core";
 })
 export class AppComponent implements OnInit {
   ngOnInit(): void {
-    this.minhaPromise("Sheila")
-      .then((result) => console.log(result))
-      .catch((erro) => console.log(erro));
+    // this.minhaPromise("Sheila")
+    //   .then((result) => console.log(result))
+    //   .catch((erro) => console.log(erro));
+
+    this.minhaObservable("Karine").subscribe(
+      (result) => console.log(result),
+      (erro) => console.log(erro)
+    );
   }
 
   title = "RXJS";
 
-  minhaPromise(nome: string): Promise<string> {
-    return new Promise((resolve, reject) => {
+  // minhaPromise(nome: string): Promise<string> {
+  //   return new Promise((resolve, reject) => {
+  //     if (nome === "Karine") {
+  //       setTimeout(() => {
+  //         resolve("Seja bem-vinda, Karine");
+  //       }, 1000);
+  //     } else {
+  //       reject("Ops! Você não é a Karine");
+  //     }
+  //   });
+  // }
+
+  minhaObservable(nome: string): Observable<string> {
+    return new Observable((subscriber) => {
       if (nome === "Karine") {
+        subscriber.next("Olá, Karine!");
+        subscriber.next("Olá de novo, Karine!");
         setTimeout(() => {
-          resolve("Seja bem-vinda, Karine");
+          subscriber.next("Resposta com delay");
         }, 1000);
       } else {
-        reject("Ops! Você não é a Karine");
+        subscriber.error('Você não é a Karine.');
       }
     });
   }
